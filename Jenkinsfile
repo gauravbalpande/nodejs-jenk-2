@@ -64,12 +64,19 @@ stages {
     }
     
     stage('Verify') {
-        steps {
-            echo '✅ Verifying deployment...'
-            sh 'curl -f http://localhost:3000 || exit 1'
-            echo '🎉 Application is running successfully!'
+    steps {
+        echo '✅ Verifying deployment...'
+        sh '''
+            echo "⏳ Waiting for the app to start..."
+            sleep 10
+            docker ps
+            echo "🔍 Checking app health..."
+            curl -f http://localhost:3000/health || (echo "App not responding" && docker logs jenkins-cicd-app && exit 1)
+        '''
+        echo '🎉 Application is running successfully!'
         }
     }
+
 }
 
 post {
