@@ -71,7 +71,7 @@ stages {
             sleep 10
             docker ps
             echo "🔍 Checking app health..."
-            curl -f http://localhost:3000/health || (echo "App not responding" && docker logs jenkins-cicd-app && exit 1)
+            curl -f http://host.docker.internal:3000/health
         '''
         echo '🎉 Application is running successfully!'
         }
